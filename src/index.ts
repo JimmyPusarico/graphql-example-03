@@ -45,6 +45,7 @@ const typeDefs = `#graphql
     getBooks: [Book]
     getBooksCount: Int!
     getBook(id: String): Book
+    getBooksByAuthor(authorName: String): [Book]
   }
   
   type Mutation {
@@ -91,6 +92,10 @@ const resolvers = {
       const { id } = args;
       const { data: book } = await axios.get(`${process.env.API_URL}/books/${id}`);
       return book;
+    },
+    getBooksByAuthor: async (root, {authorName}) => {
+      const { data: books } = await axios.get(`${process.env.API_URL}/books/?authorName=${authorName}`);
+      return books;
     }
   },
 
