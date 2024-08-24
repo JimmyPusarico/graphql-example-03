@@ -1,0 +1,73 @@
+enum Genre {
+  DYSTOPIAN
+  FICTION
+  ROMANCE
+  HORROR
+  FANTASY
+  MYSTERY
+  ADVENTURE
+  SATIRE
+  WAR
+  TRAGEDY
+}
+
+type Author {
+  id: ID!,
+  name: String!
+  nationality: String
+  books: [Book]
+}
+
+type Book {
+  id: ID!
+  title: String!
+  description: String
+  isbn: String
+  publisher: String!
+  genre: Genre!
+  year: Int
+  author: Author!
+}
+
+type Query {
+  getAuthors: [Author]
+  getAuthor(id: String!): Author
+
+  getBooks: [Book]
+  getBook(id: String!): Book
+  getBooksByAuthorName(authorName: String!): [Book]
+}
+
+type Mutation {
+  addAuthor (
+    name: String!
+    nationality: String
+  ): Author
+  updateAuthor(
+    id: ID!
+    name: String!
+    nationality: String
+  ): Author
+  deleteAuthor (id: ID!): Author
+
+  addBook (
+    title: String!
+    description: String
+    isbn: String
+    publisher: String!
+    genre: Genre!
+    year: Int
+    authorId: ID!
+  ): Book
+  updateBook (
+    id: ID!
+    title: String
+    description: String
+    isbn: String
+    publisher: String
+    genre: Genre
+    year: Int
+    authorId: ID
+  ): Book
+  deleteBook (id: ID!): Book
+}
