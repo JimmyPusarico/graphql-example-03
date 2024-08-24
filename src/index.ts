@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import { v4 as uuid } from 'uuid';
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -39,6 +40,20 @@ const typeDefs = `#graphql
     getBooks: [Book]
     getBooksCount: Int!
     getBook(id: String): Book
+  }
+  
+  type Mutation {
+    addBook (
+      title: String!
+      description: String
+      isbn: String
+      publisher: String!
+      genre: Genre!
+      publishYear: Int
+      authorName: String!
+      authorNationality: String
+    ): Book
+
   }
 `;
 
@@ -84,6 +99,15 @@ const resolvers = {
         nationality: root.authorNationality
       }
     }
+  },
+
+  Mutation: {
+    addBook: (root, args) => {
+      const newBook = { ...args, id: uuid() }
+      books.push(newBook);
+      return newBook;
+    }
+    
   }
 };
 
