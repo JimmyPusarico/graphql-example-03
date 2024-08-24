@@ -58,7 +58,7 @@
       "description": "The first book in the Harry Potter series.",
       "isbn": "978-0-7475-3269-6",
       "publisher": "Bloomsbury",
-      "gender": "FANTASY",
+      "genre": "FANTASY",
       "year": 1997,
       "author_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
     },
@@ -68,7 +68,7 @@
       "description": "A dystopian novel by George Orwell.",
       "isbn": "978-0-452-28423-4",
       "publisher": "Secker & Warburg",
-      "gender": "DYSTOPIAN",
+      "genre": "DYSTOPIAN",
       "year": 1949,
       "author_id": "d94a82b6-b7c2-44a1-a8ce-062b10ce17b6"
     },
@@ -78,7 +78,7 @@
       "description": "A classic novel by Harper Lee.",
       "isbn": "978-0-06-112008-4",
       "publisher": "J.B. Lippincott & Co.",
-      "gender": "FICTION",
+      "genre": "FICTION",
       "year": 1960,
       "author_id": "7ef1221d-0c84-4d7a-9b3d-7b5e7813c2b5"
     },
@@ -88,7 +88,7 @@
       "description": "A fantasy novel by J.R.R. Tolkien.",
       "isbn": "978-0-395-13283-2",
       "publisher": "Allen & Unwin",
-      "gender": "FANTASY",
+      "genre": "FANTASY",
       "year": 1937,
       "author_id": "eef3ac86-788f-4f72-a1d8-3c7980703ba0"
     },
@@ -98,7 +98,7 @@
       "description": "A novel by Jane Austen.",
       "isbn": "978-0-19-953556-9",
       "publisher": "T. Egerton, Whitehall",
-      "gender": "ROMANCE",
+      "genre": "ROMANCE",
       "year": 1813,
       "author_id": "c60671f2-3c3f-4b74-998f-331bd4f1f80e"
     },
@@ -108,7 +108,7 @@
       "description": "A horror novel by Stephen King.",
       "isbn": "978-0-385-12167-5",
       "publisher": "Doubleday",
-      "gender": "HORROR",
+      "genre": "HORROR",
       "year": 1977,
       "author_id": "f69d811d-786b-45e1-bd84-dbd80fcaf040"
     },
@@ -118,7 +118,7 @@
       "description": "A novel by Gabriel García Márquez.",
       "isbn": "978-0-06-093268-8",
       "publisher": "Harper & Row",
-      "gender": "Magical Realism",
+      "genre": "Magical Realism",
       "year": 1967,
       "author_id": "f7d2a833-ff05-4d9f-baf4-598dbd3e907e"
     },
@@ -128,7 +128,7 @@
       "description": "A detective novel by Agatha Christie.",
       "isbn": "978-0-316-70283-4",
       "publisher": "Collins Crime Club",
-      "gender": "MYSTERY",
+      "genre": "MYSTERY",
       "year": 1934,
       "author_id": "bb92f0f3-9cb4-4571-84e7-3d8a54c2e9bc"
     },
@@ -138,7 +138,7 @@
       "description": "A novel by Ernest Hemingway.",
       "isbn": "978-0-684-80122-3",
       "publisher": "Charles Scribner's Sons",
-      "gender": "Adventure",
+      "genre": "Adventure",
       "year": 1952,
       "author_id": "485d7877-b695-4d6a-88ce-836a8f6754c4"
     },
@@ -148,7 +148,7 @@
       "description": "A novel by Leo Tolstoy.",
       "isbn": "978-1-85326-062-9",
       "publisher": "The Russian Messenger",
-      "gender": "FICTION",
+      "genre": "FICTION",
       "year": 1869,
       "author_id": "7e3dcaac-9e18-4c0c-95b2-47768d3202c4"
     },
@@ -158,7 +158,7 @@
       "description": "The second book in the Harry Potter series.",
       "isbn": "978-0-7475-3849-0",
       "publisher": "Bloomsbury",
-      "gender": "FANTASY",
+      "genre": "FANTASY",
       "year": 1998,
       "author_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
     },
@@ -168,7 +168,7 @@
       "description": "An allegorical novella by George Orwell.",
       "isbn": "978-0-452-28423-4",
       "publisher": "Secker & Warburg",
-      "gender": "Satire",
+      "genre": "Satire",
       "year": 1945,
       "author_id": "d94a82b6-b7c2-44a1-a8ce-062b10ce17b6"
     },
@@ -178,7 +178,7 @@
       "description": "A novel by Harper Lee.",
       "isbn": "978-0-06-240985-0",
       "publisher": "Harper",
-      "gender": "FICTION",
+      "genre": "FICTION",
       "year": 2015,
       "author_id": "7ef1221d-0c84-4d7a-9b3d-7b5e7813c2b5"
     },
@@ -188,7 +188,7 @@
       "description": "A high fantasy novel by J.R.R. Tolkien.",
       "isbn": "978-0-618-62412-5",
       "publisher": "George Allen & Unwin",
-      "gender": "FANTASY",
+      "genre": "FANTASY",
       "year": 1954,
       "author_id": "eef3ac86-788f-4f72-a1d8-3c7980703ba0"
     },
@@ -198,7 +198,7 @@
       "description": "A novel by Jane Austen.",
       "isbn": "978-0-19-953556-9",
       "publisher": "T. Egerton, Whitehall",
-      "gender": "ROMANCE",
+      "genre": "ROMANCE",
       "year": 1811,
       "author_id": "c60671f2-3c3f-4b74-998f-331bd4f1f80e"
     },
@@ -208,7 +208,7 @@
       "description": "A post-apocalyptic horror novel by Stephen King.",
       "isbn": "978-0-385-12167-5",
       "publisher": "Doubleday",
-      "gender": "HORROR",
+      "genre": "HORROR",
       "year": 1978,
       "author_id": "f69d811d-786b-45e1-bd84-dbd80fcaf040"
     },
@@ -218,7 +218,7 @@
       "description": "A novel by Gabriel García Márquez.",
       "isbn": "978-0-14-012389-0",
       "publisher": "Penguin Books",
-      "gender": "ROMANCE",
+      "genre": "ROMANCE",
       "year": 1985,
       "author_id": "f7d2a833-ff05-4d9f-baf4-598dbd3e907e"
     },
@@ -228,7 +228,7 @@
       "description": "A detective novel by Agatha Christie.",
       "isbn": "978-0-00-711380-2",
       "publisher": "Collins Crime Club",
-      "gender": "MYSTERY",
+      "genre": "MYSTERY",
       "year": 1936,
       "author_id": "bb92f0f3-9cb4-4571-84e7-3d8a54c2e9bc"
     },
@@ -238,7 +238,7 @@
       "description": "A novel by Ernest Hemingway.",
       "isbn": "978-0-684-80122-3",
       "publisher": "Charles Scribner's Sons",
-      "gender": "WAR",
+      "genre": "WAR",
       "year": 1929,
       "author_id": "485d7877-b695-4d6a-88ce-836a8f6754c4"
     },
@@ -248,7 +248,7 @@
       "description": "A novel by Leo Tolstoy.",
       "isbn": "978-1-85326-062-9",
       "publisher": "The Russian Messenger",
-      "gender": "Tragedy",
+      "genre": "TRAGEDY",
       "year": 1877,
       "author_id": "7e3dcaac-9e18-4c0c-95b2-47768d3202c4"
     },
@@ -258,7 +258,7 @@
       "description": "The third book in the Harry Potter series.",
       "isbn": "978-0-7475-4215-2",
       "publisher": "Bloomsbury",
-      "gender": "FANTASY",
+      "genre": "FANTASY",
       "year": 1999,
       "author_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
     },
@@ -268,7 +268,7 @@
       "description": "A dystopian novel by Aldous Huxley.",
       "isbn": "978-0-06-085052-4",
       "publisher": "Chatto & Windus",
-      "gender": "DYSTOPIAN",
+      "genre": "DYSTOPIAN",
       "year": 1932,
       "author_id": "d94a82b6-b7c2-44a1-a8ce-062b10ce17b6"
     },
@@ -278,7 +278,7 @@
       "description": "A classic novel by Harper Lee.",
       "isbn": "978-0-06-112008-4",
       "publisher": "J.B. Lippincott & Co.",
-      "gender": "FICTION",
+      "genre": "FICTION",
       "year": 1960,
       "author_id": "7ef1221d-0c84-4d7a-9b3d-7b5e7813c2b5"
     },
@@ -288,7 +288,7 @@
       "description": "The first volume of The Lord of the Rings.",
       "isbn": "978-0-395-73987-2",
       "publisher": "Allen & Unwin",
-      "gender": "FANTASY",
+      "genre": "FANTASY",
       "year": 1954,
       "author_id": "eef3ac86-788f-4f72-a1d8-3c7980703ba0"
     },
@@ -298,7 +298,7 @@
       "description": "A novel by Jane Austen.",
       "isbn": "978-0-19-953556-9",
       "publisher": "T. Egerton, Whitehall",
-      "gender": "ROMANCE",
+      "genre": "ROMANCE",
       "year": 1815,
       "author_id": "c60671f2-3c3f-4b74-998f-331bd4f1f80e"
     },
@@ -308,7 +308,7 @@
       "description": "A horror novel by Stephen King.",
       "isbn": "978-0-670-81302-4",
       "publisher": "Viking",
-      "gender": "HORROR",
+      "genre": "HORROR",
       "year": 1986,
       "author_id": "f69d811d-786b-45e1-bd84-dbd80fcaf040"
     },
@@ -318,7 +318,7 @@
       "description": "A novella by Gabriel García Márquez.",
       "isbn": "978-0-679-73885-0",
       "publisher": "Knopf",
-      "gender": "FANTASY",
+      "genre": "FANTASY",
       "year": 1981,
       "author_id": "f7d2a833-ff05-4d9f-baf4-598dbd3e907e"
     },
@@ -328,7 +328,7 @@
       "description": "A detective novel by Agatha Christie.",
       "isbn": "978-0-316-70283-4",
       "publisher": "Collins Crime Club",
-      "gender": "MYSTERY",
+      "genre": "MYSTERY",
       "year": 1934,
       "author_id": "bb92f0f3-9cb4-4571-84e7-3d8a54c2e9bc"
     },
@@ -338,7 +338,7 @@
       "description": "A novel by Ernest Hemingway.",
       "isbn": "978-0-684-80122-3",
       "publisher": "Charles Scribner's Sons",
-      "gender": "WAR",
+      "genre": "WAR",
       "year": 1940,
       "author_id": "485d7877-b695-4d6a-88ce-836a8f6754c4"
     },
@@ -348,7 +348,7 @@
       "description": "A novel by Leo Tolstoy.",
       "isbn": "978-1-85326-062-9",
       "publisher": "Alba Editorial",
-      "gender": "FICTION",
+      "genre": "FICTION",
       "year": 1878,
       "author_id": "7e3dcaac-9e18-4c0c-95b2-47768d3202c4"
     }
