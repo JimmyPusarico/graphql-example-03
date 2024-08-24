@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import axios from 'axios';
 import { GraphQLError } from 'graphql';
 import { v4 as uuid } from 'uuid';
 
@@ -98,11 +99,15 @@ const books = [
 // This resolver retrieves books from the "books" array above.
 const resolvers = {
   Query: {
-    getBooks: () => books,
+    getBooks: async (root, args) => {
+      const { data: books } = await axios.get('http://localhost:3000/books');
+      return books;
+    },
     getBooksCount: () => books.length,
-    getBook: (root, args) => {
+    getBook: async (root, args) => {
       const { id } = args;
-      return books.find(book => book.id === id);
+      const { data: book } = await axios.get('http://localhost:3000/books/' + id);
+      return book;
     }
   },
 
@@ -116,18 +121,18 @@ const resolvers = {
   },
 
   Mutation: {
-    addBook: (root, args) => {
-      if (books.find(book => book.title === args.title)) {
-        throw new GraphQLError('Título es una valor único', {
-          extensions: {
-            code: 'BAD_USER_INPUT'
-          }
-        });
-      }
+    addBook: async (root, args) => {
+      // if (books.find(book => book.title === args.title)) {
+      //   throw new GraphQLError('Título es una valor único', {
+      //     extensions: {
+      //       code: 'BAD_USER_INPUT'
+      //     }
+      //   });
+      // }
 
       const newBook = { ...args, id: uuid() }
-      books.push(newBook);
-      return newBook;
+      const response = await axios.post('http://localhost:3000/books', newBook)
+      return response.data;
     },
     
     updateBook: (root, args) => {
