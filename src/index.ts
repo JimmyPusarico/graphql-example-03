@@ -2,160 +2,349 @@ import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import axios from 'axios';
 import { GraphQLError } from 'graphql';
-import { v4 as uuid } from 'uuid';
 import dotenv from 'dotenv';
+import { readFileSync } from 'fs';
 
 dotenv.config();
 
-// A schema is a collection of type definitions (hence "typeDefs")
-// that together define the "shape" of queries that are executed against
-// your data.
-const typeDefs = `#graphql
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
+const typeDefs = readFileSync('src/schema.graphql', 'utf8');
 
-  enum Genre {
-    NONE
-    FICTION
-    MYSTERY
-    FANTASY
-    ROMANCE
-  }
-
-  type Author {
-    name: String!
-    nationality: String
-  }
-
-  # This "Book" type defines the queryable fields for every book in our data source.
-  type Book {
-    id: String!
-    title: String!
-    description: String
-    isbn: String
-    publisher: String!
-    genre: Genre!
-    publishYear: Int
-    author: Author!
-  }
-
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
-  type Query {
-    getBooks: [Book]
-    getBooksCount: Int!
-    getBook(id: String): Book
-    getBooksByAuthor(authorName: String): [Book]
-  }
-  
-  type Mutation {
-    addBook (
-      title: String!
-      description: String
-      isbn: String
-      publisher: String!
-      genre: Genre!
-      publishYear: Int
-      authorName: String!
-      authorNationality: String
-    ): Book
-
-    updateBook (
-      id: String!
-      title: String
-      description: String
-      isbn: String
-      publisher: String
-      genre: Genre
-      publishYear: Int
-      authorName: String
-      authorNationality: String
-    ): Book
-
-    deleteBook (id: String!): Book
-  }
-`;
-
-// Resolvers define how to fetch the types defined in your schema.
-// This resolver retrieves books from the "books" array above.
 const resolvers = {
-  Query: {
-    getBooks: async (root, args) => {
-      const { data: books } = await axios.get(`${process.env.API_URL}/books/`);
-      return books;
-    },
-    getBooksCount: async () => {
-      const { data: books } = await axios.get(`${process.env.API_URL}/books/`);
-      return books.length;
-    },
-    getBook: async (root, args) => {
-      const { id } = args;
-      const { data: book } = await axios.get(`${process.env.API_URL}/books/${id}`);
-      return book;
-    },
-    getBooksByAuthor: async (root, {authorName}) => {
-      const { data: books } = await axios.get(`${process.env.API_URL}/books/?authorName=${authorName}`);
-      return books;
+  Book: {
+    author: async (root) => {
+      try {
+        const { data: author } = await axios.get(process.env.API_URL + '/authors/' + root.author_id);
+        return {
+          name: author.name,
+          nationality: author.nationality
+        };
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        return null;
+      }
+    }
+  },
+  Author: {
+    books: async (root) => {
+      try {
+        const { data: books } = await axios.get(process.env.API_URL + '/books?author_id=' + root.id);
+        return books;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        return null;
+      }
     }
   },
 
-  Book: {
-    author: (root) => {
-      return {
-        name: root.authorName,
-        nationality: root.authorNationality
+  Query: {
+    getBooks: async (root, args) => {
+      try {
+        const { data: books } = await axios.get(process.env.API_URL + '/books');
+        return books;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        return null;
       }
-    }
+    },
+    getBook: async (root, {id}) => {
+      try {
+        const { data: book } = await axios.get(process.env.API_URL + '/books/' + id);
+        return book;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        return null;
+      }
+    },
+    getBooksByAuthorName: async (root, {authorName}) => {
+      try {
+        const { data: author } = await axios.get(process.env.API_URL + '/authors?name=' + authorName);
+        const { data: books } = await axios.get(process.env.API_URL + '/books?author_id=' + author[0].id);
+        return books;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        return [];
+      }
+    },
+
+    getAuthors: async (root, args) => {
+      try {
+        const { data: authors } = await axios.get(process.env.API_URL + '/authors');
+        return authors;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        return null;
+      }
+    },
+    getAuthor: async (root, {id}) => {
+      try {
+        const { data: author } = await axios.get(process.env.API_URL + '/authors/' + id);
+        return author;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        return null;
+      }
+    },
   },
 
   Mutation: {
-    addBook: async (root, args) => {
-      // Verificamos si existe un libro con el mismo título
-      const { data: books } = await axios.get(process.env.API_URL + '/books?title=' + args.title);
-      if (books.length > 0) {
-        throw new GraphQLError('El Título del libro ya existe', {
+    addAuthor: async (root, args) => {
+      let existsAuthor = false;
+      try {
+        // Verificamos si existe un libro con el mismo título
+        const { data: authors } = await axios.get(process.env.API_URL + '/authors?name=' + args.name);
+        if (authors.length > 0) {
+          existsAuthor = true;
+        }
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') { 
+          throw new Error('Error al conectar con el API');
+        }
+        throw new Error(error.message);
+      }
+
+      if (existsAuthor) {
+        throw new GraphQLError('El nombre del autor ya existe', {
           extensions: {
             code: 'BAD_USER_INPUT'
           }
         });
       }
 
-      const newBook = { ...args, id: uuid() }
-      const response = await axios.post(`${process.env.API_URL}/books`, newBook)
-      return response.data;
+      const newAuthor = {
+        name: args.name,
+        nationality: args.nationality
+      };
+      try {
+        // Creamos el recurso en el API RESTful
+        const { data: author }  = await axios.post(process.env.API_URL + '/authors', newAuthor);
+        return author;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        throw new Error(error.message);
+      }
     },
-    
-    updateBook: async (root, args) => {
-      const { data: book, status: statusCode } = await axios.get(process.env.API_URL + '/books/' + args.id);
 
-      if (statusCode == 404) {
-        throw new GraphQLError(`El libro con ID ${args.id} no existe`, {
+    updateAuthor: async (root, args) => {
+      // Obtenemos el autor con el ID
+      const { data: author } = await axios.get(process.env.API_URL + '/authors/' + args.id).catch(function (error) {
+        if (error.code === 'ECONNREFUSED') { 
+          throw new Error('Error al conectar con el API');
+        }
+        throw new GraphQLError('No existe el author con el ID: ' + args.id, {
           extensions: {
             code: 'BAD_USER_INPUT'
           }
         });
+      });
+
+      if (args.name) {
+        let existsAuthorName = false;
+        try {
+          // Verificamos si existe un autor con el mismo nombre y que tenga diferente ID del que se está editando
+          const { data: authors } = await axios.get(process.env.API_URL + '/authors?name=' + args.name + '&id_ne=' + args.id);
+          if (authors.length > 0) {
+            existsAuthorName = true;
+          }
+        } catch (error) {
+          if (error.code === 'ECONNREFUSED') { 
+            throw new Error('Error al conectar con el API');
+          }
+          throw new Error(error.message);
+        }
+
+        if (existsAuthorName) {
+          throw new GraphQLError('El nombre del libro ya existe', {
+            extensions: {
+              code: 'BAD_USER_INPUT'
+            }
+          });
+        }
       }
 
-      const updatedBook = {
-        ...book,
-        title: args.title || book.title,
-        description: args.description || book.description,
-        isbn: args.isbn || book.isbn,
-        publisher: args.publisher || book.publisher,
-        genre: args.genre | book.genre,
-        publishYear: args.publishYear || book.publishYear,
-        authorName: args.authorName || book.authorName,
-        authorNationality: args.authorNationality || book.authorNationality
+      const updatedAuthorData = {
+        name: args.name ? args.name : author.name,
+        nationality: args.nationality ? args.nationality : author.nationality
       };
 
-      const response = await axios.put(`${process.env.API_URL}/books/${book.id}`, updatedBook);
-      return response.data;
+      try {
+        const { data: updatedAuthor } = await axios.put(process.env.API_URL + '/authors/' + author.id, updatedAuthorData);
+        return updatedAuthor;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        throw new Error(error.message);
+      }
+    },
+    deleteAuthor: async (root, {id}) => {
+      // Obtenemos el autor con el ID
+      await axios.get(process.env.API_URL + '/authors/' + id).catch(function (error) {
+        if (error.code === 'ECONNREFUSED') { 
+          throw new Error('Error al conectar con el API');
+        }
+        throw new GraphQLError('No existe el autor con el ID: ' + id, {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      });
+
+      try {
+        const { data: deletedAuthor } = await axios.delete(process.env.API_URL + '/authors/' + id);
+        return deletedAuthor;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        throw new Error(error.message);
+      }
     },
 
-    deleteBook: async (root, { id }) => {
-      const response = await axios.delete(`${process.env.API_URL}/books/${id}`);
-      return response.data;
-    }
+    addBook: async (root, args) => {
+      let existsBook = false;
+      try {
+        // Verificamos si existe un libro con el mismo título
+        const { data: books } = await axios.get(process.env.API_URL + '/books?title=' + args.title);
+        if (books.length > 0) {
+          existsBook = true;
+        }
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') { 
+          throw new Error('Error al conectar con el API');
+        }
+        throw new Error(error.message);
+      }
+
+      if (existsBook) {
+        throw new GraphQLError('El título del libro ya existe', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      }
+
+      try {
+        // Verificamos si el Autor existe
+        await axios.get(process.env.API_URL + '/authors/' + args.authorId);
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') {
+          throw new Error('Error al conectar con el API');
+        }
+        throw new GraphQLError('No existe el autor con el ID: ' + args.authorId, {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      }
+
+      const newBook = {
+        title: args.title,
+        description: args.description,
+        isbn: args.isbn,
+        publisher: args.publisher,
+        genre: args.genre,
+        year: args.year,
+        author_id: args.authorId
+      };
+      try {
+        // Creamos el recurso en el API RESTful
+        const { data: book }  = await axios.post(process.env.API_URL + '/books', newBook);
+        return book;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        throw new Error(error.message);
+      }
+    },
+
+    updateBook: async (root, args) => {
+      // Obtenemos el libro con el ID
+      const { data: book } = await axios.get(process.env.API_URL + '/books/' + args.id).catch(function (error) {
+        if (error.code === 'ECONNREFUSED') { 
+          throw new Error('Error al conectar con el API');
+        }
+        throw new GraphQLError('No existe el libro con el ID: ' + args.id, {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      });
+
+      if (args.title) {
+        let existsBookTitle = false;
+        try {
+          // Verificamos si existe un libro con el mismo título y que tenga diferente ID del que se está editando
+          const { data: books } = await axios.get(process.env.API_URL + '/books?title=' + args.title + '&id_ne=' + args.id);
+          if (books.length > 0) {
+            existsBookTitle = true;
+          }
+        } catch (error) {
+          if (error.code === 'ECONNREFUSED') { 
+            throw new Error('Error al conectar con el API');
+          }
+          throw new Error(error.message);
+        }
+
+        if (existsBookTitle) {
+          throw new GraphQLError('El título del libro ya existe', {
+            extensions: {
+              code: 'BAD_USER_INPUT'
+            }
+          });
+        }
+      }
+
+      if (args.authorId) {
+        try {
+          // Verificamos si el Autor existe
+          await axios.get(process.env.API_URL + '/authors/' + args.authorId);
+        } catch (error) {
+          if (error.code === 'ECONNREFUSED') {
+            throw new Error('Error al conectar con el API');
+          }
+          throw new GraphQLError('No existe el autor con el ID: ' + args.authorId, {
+            extensions: {
+              code: 'BAD_USER_INPUT'
+            }
+          });
+        }
+      }
+
+      const updatedBookData = {
+        title: args.title ? args.title : book.title,
+        description: args.description ? args.description : book.description,
+        isbn: args.isbn ? args.isbn : book.isbn,
+        publisher: args.publisher ? args.publisher : book.publisher,
+        genre: args.genre ? args.genre : book.genre,
+        year: args.year ? args.year : book.year,
+        author_id: args.authorId ? args.authorId : book.authorName
+      };
+
+      try {
+        const { data: updatedBook } = await axios.put(process.env.API_URL + '/books/' + book.id, updatedBookData);
+        return updatedBook;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        throw new Error(error.message);
+      }
+    },
+    deleteBook: async (root, {id}) => {
+      // Obtenemos el libro con el ID
+      await axios.get(process.env.API_URL + '/books/' + id).catch(function (error) {
+        if (error.code === 'ECONNREFUSED') { 
+          throw new Error('Error al conectar con el API');
+        }
+        throw new GraphQLError('No existe el libro con el ID: ' + id, {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      });
+
+      try {
+        const { data: deletedBook } = await axios.delete(process.env.API_URL + '/books/' + id);
+        return deletedBook;
+      } catch (error) {
+        if (error.code === 'ECONNREFUSED') throw new Error('Error al conectar con el API');
+        throw new Error(error.message);
+      }
+    },
+
   }
 };
 
@@ -171,7 +360,7 @@ const server = new ApolloServer({
 //  2. installs your ApolloServer instance as middleware
 //  3. prepares your app to handle incoming requests
 const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 },
+  listen: { port: 4001 },
 });
 
 console.log(`🚀  Server ready at: ${url}`);
