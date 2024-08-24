@@ -147,8 +147,9 @@ const resolvers = {
       return response.data;
     },
 
-    deleteBook: (root, { id }) => {
-      
+    deleteBook: async (root, { id }) => {
+      const response = await axios.delete(`${process.env.API_URL}/books/${id}`);
+      return response.data;
     }
   }
 };
