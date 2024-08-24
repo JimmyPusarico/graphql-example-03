@@ -120,8 +120,31 @@ const resolvers = {
       return response.data;
     },
     
-    updateBook: (root, args) => {
-      
+    updateBook: async (root, args) => {
+      const { data: book, status: statusCode } = await axios.get(process.env.API_URL + '/books/' + args.id);
+
+      if (statusCode == 404) {
+        throw new GraphQLError(`El libro con ID ${args.id} no existe`, {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      }
+
+      const updatedBook = {
+        ...book,
+        title: args.title || book.title,
+        description: args.description || book.description,
+        isbn: args.isbn || book.isbn,
+        publisher: args.publisher || book.publisher,
+        genre: args.genre | book.genre,
+        publishYear: args.publishYear || book.publishYear,
+        authorName: args.authorName || book.authorName,
+        authorNationality: args.authorNationality || book.authorNationality
+      };
+
+      const response = await axios.put(`${process.env.API_URL}/books/${book.id}`, updatedBook);
+      return response.data;
     },
 
     deleteBook: (root, { id }) => {
