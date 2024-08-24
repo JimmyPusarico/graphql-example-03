@@ -1,0 +1,33 @@
+{
+  "books": [
+    {
+      "id": "d26fd654-f4d4-4b98-91e5-6d8c9569aed6",
+      "title": "The Awakening",
+      "description": "The Awakening es una novela de la escritora estadounidense Kate Chopin.",
+      "publisher": "W W Norton & Co Inc",
+      "genre": "NONE",
+      "publishYear": "1899",
+      "authorName": "Kate Chopin"
+    },
+    {
+      "id": "35b19ead-3aa9-415e-a46d-6621e1604119",
+      "title": "City of Glass",
+      "description": "Ciudad de cristal es el tercer libro de la saga Cazadores de Sombras, escrita por Cassandra Clare. Fue publicada originalmente en Estados Unidos.",
+      "isbn": "978-0140097313",
+      "publisher": "Simon & Schuster",
+      "genre": "FANTASY",
+      "publishYear": "2009",
+      "authorName": "Paul Auster",
+      "authorNationality": "Estadounidense"
+    },
+    {
+      "id": "111111-f4d4-4b98-91e5-6d8c9569aed6",
+      "title": "TEST",
+      "description": "The Awakening es una novela de la escritora estadounidense Kate Chopin.",
+      "publisher": "W W Norton & Co Inc",
+      "genre": "NONE",
+      "publishYear": "1899",
+      "authorName": "Kate Chopin"
+    }
+  ]
+}
