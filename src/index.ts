@@ -105,13 +105,15 @@ const resolvers = {
 
   Mutation: {
     addBook: async (root, args) => {
-      // if (books.find(book => book.title === args.title)) {
-      //   throw new GraphQLError('Título es una valor único', {
-      //     extensions: {
-      //       code: 'BAD_USER_INPUT'
-      //     }
-      //   });
-      // }
+      // Verificamos si existe un libro con el mismo título
+      const { data: books } = await axios.get(process.env.API_URL + '/books?title=' + args.title);
+      if (books.length > 0) {
+        throw new GraphQLError('El Título del libro ya existe', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      }
 
       const newBook = { ...args, id: uuid() }
       const response = await axios.post(`${process.env.API_URL}/books`, newBook)
