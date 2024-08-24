@@ -15,6 +15,7 @@ const resolvers = {
       try {
         const { data: author } = await axios.get(process.env.API_URL + '/authors/' + root.author_id);
         return {
+          id: author.id,
           name: author.name,
           nationality: author.nationality
         };
@@ -255,10 +256,17 @@ const resolvers = {
     updateBook: async (root, args) => {
       // Obtenemos el libro con el ID
       const { data: book } = await axios.get(process.env.API_URL + '/books/' + args.id).catch(function (error) {
-        if (error.code === 'ECONNREFUSED') { 
+        if (error.code === 'ECONNREFUSED') {
           throw new Error('Error al conectar con el API');
         }
-        throw new GraphQLError('No existe el libro con el ID: ' + args.id, {
+        if (error.status === 404) {
+          throw new GraphQLError('No existe el libro con el ID: ' + args.id, {
+            extensions: {
+              code: 'BAD_USER_INPUT'
+            }
+          });
+        }
+        throw new GraphQLError('Error ' + error.code, {
           extensions: {
             code: 'BAD_USER_INPUT'
           }
@@ -306,7 +314,7 @@ const resolvers = {
       }
 
       const updatedBookData = {
-        title: args.title ? args.title : book.title,
+        title: args.title || book.title,
         description: args.description ? args.description : book.description,
         isbn: args.isbn ? args.isbn : book.isbn,
         publisher: args.publisher ? args.publisher : book.publisher,
@@ -329,7 +337,14 @@ const resolvers = {
         if (error.code === 'ECONNREFUSED') { 
           throw new Error('Error al conectar con el API');
         }
-        throw new GraphQLError('No existe el libro con el ID: ' + id, {
+        if (error.status === 404) {
+          throw new GraphQLError('No existe el libro con el ID: ' + id, {
+            extensions: {
+              code: 'BAD_USER_INPUT'
+            }
+          });
+        }
+        throw new GraphQLError('Error ' + error.code, {
           extensions: {
             code: 'BAD_USER_INPUT'
           }
