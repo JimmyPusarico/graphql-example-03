@@ -1,6 +1,5 @@
 {
   "ignore": [
-    "dist/*",
     "logs/*",
     "db.json"
   ]
