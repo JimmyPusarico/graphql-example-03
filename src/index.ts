@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import { GraphQLError } from 'graphql';
 import { v4 as uuid } from 'uuid';
 
 // A schema is a collection of type definitions (hence "typeDefs")
@@ -116,6 +117,14 @@ const resolvers = {
 
   Mutation: {
     addBook: (root, args) => {
+      if (books.find(book => book.title === args.title)) {
+        throw new GraphQLError('Título es una valor único', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      }
+
       const newBook = { ...args, id: uuid() }
       books.push(newBook);
       return newBook;
