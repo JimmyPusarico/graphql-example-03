@@ -5,7 +5,8 @@
   "scripts": {
     "compile": "tsc",
     "start": "npm run compile && node ./dist/index.js",
-    "start:dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\""
+    "start:dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "json-server": "json-server --watch db.json"
   },
   "keywords": [],
   "author": "",
