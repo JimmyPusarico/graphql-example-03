@@ -54,6 +54,17 @@ const typeDefs = `#graphql
       authorNationality: String
     ): Book
 
+    updateBook (
+      id: String!
+      title: String
+      description: String
+      isbn: String
+      publisher: String
+      genre: Genre
+      publishYear: Int
+      authorName: String
+      authorNationality: String
+    ): Book
   }
 `;
 
@@ -106,8 +117,27 @@ const resolvers = {
       const newBook = { ...args, id: uuid() }
       books.push(newBook);
       return newBook;
-    }
+    },
     
+    updateBook: (root, args) => {
+      const updatedBookIndex = books.findIndex(book => book.id === args.id);
+
+      if (updatedBookIndex === -1) return null;
+
+      const book = books[updatedBookIndex];
+      const updatedBook = {...book,
+        title: args.title ? args.title : book.title,
+        description: args.description ? args.description : book.description,
+        isbn: args.isbn ? args.isbn : book.isbn,
+        publisher: args.publisher ? args.publisher : book.publisher,
+        genre: args.genre ? args.genre : book.genre,
+        publishYear: args.publishYear ? args.publishYear : book.publishYear,
+        authorName: args.authorName ? args.authorName : book.authorName,
+        authorNationality: args.authorNationality ? args.authorNationality : book.authorNationality
+      };
+      books[updatedBookIndex] = updatedBook;
+      return updatedBook;
+    }
   }
 };
 
