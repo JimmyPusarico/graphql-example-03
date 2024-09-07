@@ -1,73 +1,70 @@
-enum Genre {
-  DYSTOPIAN
-  FICTION
-  ROMANCE
-  HORROR
-  FANTASY
-  MYSTERY
-  ADVENTURE
-  SATIRE
-  WAR
-  TRAGEDY
+# Definición de la categoría (Category)
+type Category {
+  id: ID!                         # UUID requerido
+  title: String!                   # Título requerido
+  description: String              # Descripción opcional (texto largo)
 }
 
-type Author {
-  id: ID!,
-  name: String!
-  nationality: String
-  books: [Book]
+# Definición del artículo (Article)
+type Article {
+  id: ID!                         # UUID requerido
+  title: String!                   # Título requerido
+  author: String                   # Autor opcional
+  introduction: String             # Introducción opcional
+  fulltext: String!                # Texto completo requerido
+  keywords: [String]               # Palabras clave opcional (arreglo de textos)
+  status: ArticleStatus!           # Estado del artículo (enum)
+  publish_datetime: String!        # Fecha y hora de publicación (requerido)
+  views: Int                       # Número de visualizaciones (opcional, por defecto 0)
+  category: Category               # Relación con Category (campo foráneo)
 }
 
-type Book {
-  id: ID!
-  title: String!
-  description: String
-  isbn: String
-  publisher: String!
-  genre: Genre!
-  year: Int
-  author: Author!
+# Definición del enum para el estado del artículo
+enum ArticleStatus {
+  WRITING                          # El artículo está siendo escrito
+  PUBLISHED                        # El artículo está publicado
+  NOT_PUBLISHED                    # El artículo no ha sido publicado
+  ARCHIVED                         # El artículo ha sido archivado
 }
 
+# Consultas disponibles (Queries)
 type Query {
-  getAuthors: [Author]
-  getAuthor(id: String!): Author
-
-  getBooks: [Book]
-  getBook(id: String!): Book
-  getBooksByAuthorName(authorName: String!): [Book]
+  categories: [Category]           # Listar todas las categorías
+  category(id: ID!): Category      # Obtener una categoría por ID
+  articles: [Article]              # Listar todos los artículos
+  article(id: ID!): Article        # Obtener un artículo por ID
 }
 
+# Mutaciones disponibles (Mutations)
 type Mutation {
-  addAuthor (
-    name: String!
-    nationality: String
-  ): Author
-  updateAuthor(
-    id: ID!
-    name: String!
-    nationality: String
-  ): Author
-  deleteAuthor (id: ID!): Author
+  createCategory(title: String!, description: String): Category
+  updateCategory(id: ID!, title: String!, description: String): Category
+  deleteCategory(id: ID!): Boolean
 
-  addBook (
-    title: String!
-    description: String
-    isbn: String
-    publisher: String!
-    genre: Genre!
-    year: Int
-    authorId: ID!
-  ): Book
-  updateBook (
-    id: ID!
-    title: String
-    description: String
-    isbn: String
-    publisher: String
-    genre: Genre
-    year: Int
-    authorId: ID
-  ): Book
-  deleteBook (id: ID!): Book
+  createArticle(
+    title: String!,
+    author: String,
+    introduction: String,
+    fulltext: String!,
+    keywords: [String],
+    status: ArticleStatus!,
+    publish_datetime: String!,
+    views: Int,
+    category_id: ID!
+  ): Article
+
+  updateArticle(
+    id: ID!,
+    title: String!,
+    author: String,
+    introduction: String!,
+    fulltext: String!,
+    keywords: [String],
+    status: ArticleStatus!,
+    publish_datetime: String!,
+    views: Int,
+    category_id: ID!
+  ): Article
+
+  deleteArticle(id: ID!): Boolean
 }

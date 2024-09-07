@@ -1,4 +1,4 @@
-{
+/* {
   "compilerOptions": {
     "rootDirs": ["src"],
     "outDir": "dist",
@@ -9,4 +9,18 @@
     "esModuleInterop": true,
     "types": ["node"]
   }
+} */
+
+{
+  "compilerOptions": {
+    "module": "CommonJS",          // Forzar el uso de CommonJS en lugar de ESM
+    "target": "ESNext",            // Usar la última versión de JavaScript
+    "strict": true,
+    "esModuleInterop": true,       // Permite interoperabilidad entre módulos ES6 y CommonJS
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
+
